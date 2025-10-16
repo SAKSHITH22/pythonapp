@@ -11,7 +11,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/SAKSHITH22/pythonapp.git'
+        git branch: 'main', url: 'https://github.com/SAKSHITH22/pythonapp.git''
       }
     }
 
