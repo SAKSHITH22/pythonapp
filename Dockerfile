@@ -11,5 +11,5 @@ COPY server.py index.html ./
 EXPOSE 8001
 
 # Run the server
-
 CMD ["python3", "server.py"]
+
