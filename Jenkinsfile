@@ -33,10 +33,10 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
-                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                         docker push $IMAGE:$TAG
-                    """
+                    '''
                 }
             }
         }
@@ -49,15 +49,9 @@ pipeline {
 
         stage('Configure AWS & Kubeconfig') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-creds'
-                ]]) {
+                withAWS(credentials: 'aws-creds', region: "${AWS_REGION}") {
                     sh """
-                        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile $AWS_PROFILE
-                        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile $AWS_PROFILE
-                        aws configure set region $AWS_REGION --profile $AWS_PROFILE
-                        aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME --profile $AWS_PROFILE
+                        aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION --profile $AWS_PROFILE
                     """
                 }
             }
