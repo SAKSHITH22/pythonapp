@@ -18,4 +18,4 @@ spec:
       - name: pythonapp
         image: sakshith123/pythonapp:latest
         ports:
-        - containerPort: 8001
+        - containerPort: 8001
