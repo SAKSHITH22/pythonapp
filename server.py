@@ -57,7 +57,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_error(404, "Page Not Found")
 
 if __name__ == '__main__':
-    PORT = 8081
+    PORT = 8001
     server = HTTPServer(('localhost', PORT), SimpleHTTPRequestHandler)
     print(f"Server running on http://localhost:{PORT}")
+
     server.serve_forever()
