@@ -8,7 +8,8 @@ WORKDIR /app
 COPY server.py index.html ./
 
 # Expose port 8081
-EXPOSE 8081
+EXPOSE 8001
 
 # Run the server
+
 CMD ["python3", "server.py"]
