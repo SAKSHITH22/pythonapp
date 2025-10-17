@@ -74,13 +74,3 @@ pipeline {
             }
         }
     }
-
-    post {
-        success {
-            echo "✅ Deployment Successful: $IMAGE:$TAG"
-        }
-        failure {
-            echo "❌ Deployment Failed. Check Jenkins console output."
-        }
-    }
-}
