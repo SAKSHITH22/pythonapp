@@ -5,7 +5,6 @@ pipeline {
         IMAGE = "sakshith123/pythonapp"
         AWS_REGION = "us-east-1"
         CLUSTER_NAME = "sakshith_01-cluster"
-        AWS_PROFILE = "eks-profile"
     }
 
     stages {
@@ -51,7 +50,7 @@ pipeline {
             steps {
                 withAWS(credentials: 'aws-creds', region: "${AWS_REGION}") {
                     sh """
-                        aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION --profile $AWS_PROFILE
+                        aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
                     """
                 }
             }
@@ -59,12 +58,14 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh """
-                    export AWS_PROFILE=$AWS_PROFILE
-                    kubectl apply -f deployment.yaml
-                    kubectl apply -f service.yaml
-                    kubectl rollout status deployment/pythonapp-deployment --timeout=120s
-                """
+                withAWS(credentials: 'aws-creds', region: "${AWS_REGION}") {
+                    sh """
+                        kubectl apply -f deployment.yaml
+                        kubectl apply -f service.yaml
+                        kubectl rollout status deployment/pythonapp-deployment --timeout=120s
+                        kubectl get svc
+                    """
+                }
             }
         }
     }
