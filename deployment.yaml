@@ -16,6 +16,8 @@ spec:
     spec:
       containers:
       - name: pythonapp
-        image: sakshith123/pythonapp:latest
+        image: sakshith123/pythonapp:latest   # Jenkins will replace 'latest' with dynamic tag
         ports:
         - containerPort: 8001
+        # Ensure the app listens on all interfaces
+        # e.g., if using Flask: app.run(host='0.0.0.0', port=8001)
