@@ -75,12 +75,18 @@ pipeline {
         }
 
         stage('Print Public URL') {
-            steps {
-                sh '''
-                    PUBLIC_URL=$(kubectl get svc python-app-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-                    echo "Your application is live at: http://$PUBLIC_URL"
-                '''
-            }
+    steps {
+        withCredentials([[
+            $class: 'AmazonWebServicesCredentialsBinding',
+            credentialsId: 'aws-creds'
+        ]]) {
+            sh '''
+                PUBLIC_URL=$(kubectl get svc python-app-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+                echo "Your application is live at: http://$PUBLIC_URL"
+            '''
         }
+    }
+}
+
     }
 }
