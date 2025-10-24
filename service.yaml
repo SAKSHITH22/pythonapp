@@ -5,8 +5,8 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: pythonapp
+    app: pythonapp   # Must match labels in your deployment pods
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8001
+      port: 80       # The port users access via ELB
+      targetPort: 8001  # The port your container listens on
